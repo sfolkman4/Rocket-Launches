@@ -3,14 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import cartopy.crs as ccrs
-import requests
-from PIL import Image
-from io import BytesIO
 
-
-
-
-df = pd.read_csv('launch_data.csv')
+df = pd.read_csv('C:/Users/sfolk/Desktop/STAT386/Rocket Launches/launch_data.csv')
 
 # Convert 'date' column to datetime format
 df['date'] = pd.to_datetime(df['date'])
