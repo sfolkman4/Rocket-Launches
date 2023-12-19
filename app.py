@@ -3,6 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import cartopy.crs as ccrs
+import requests
+from PIL import Image
+from io import BytesIO
+
 
 df = pd.read_csv('launch_data.csv')
 
@@ -25,7 +29,7 @@ st.markdown('[](https://github.com/boi-andy/final_project)')
 # Plot 1: Line graph of launches per year by provider
 st.header('Launches by Provider')
 
-# Sidebar to select service provider
+#Select service provider
 selected_lsp = st.selectbox('Select Service Provider', df['lsp_name'].unique())
 
 # Filter the DataFrame based on the selected service provider
@@ -87,6 +91,23 @@ st.pyplot()
 
 # Calculate the most popular launch location for the selected service provider
 most_popular_type = filtered_df['mission_type'].mode().values[0]
+
+# Find the most recent launch
+most_recent_launch = filtered_df.nlargest(1, 'date')  # Assuming 'launch_date' is your timestamp column
+
+# Access the image URL of the most recent launch
+image_url_most_recent = most_recent_launch['image'].values[0]
+
+# Fetch and display the image
+response = requests.get(image_url_most_recent)
+img = Image.open(BytesIO(response.content))
+
+plt.imshow(img)
+plt.axis('off')  # Optional: turn off axis
+plt.title('Most Recent Launch Image')
+plt.show()
+
+
 
 # Display the most popular type location
 st.write(f"The most popular type location for {selected_lsp} is: **{most_popular_type}**")
