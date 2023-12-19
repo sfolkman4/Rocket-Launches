@@ -8,6 +8,8 @@ from PIL import Image
 from io import BytesIO
 
 
+
+
 df = pd.read_csv('launch_data.csv')
 
 # Convert 'date' column to datetime format
@@ -20,11 +22,11 @@ df['year'] = df['date'].dt.year
 st.title('Rocket Launch Data Exploration')
 st.markdown('---')  
 
-st.text('My analysis and explanation for each of these visuals can be found on my blog post:') 
-st.markdown('[](https://boi-andy.github.io/my-blog/2023/11/14/EDA.html)')
+st.text('My analysis and explanation for each of these visuals and more can be found on my blog post:') 
+st.markdown('[Successful Rocket Launches Data Exploration](https://sfolkman4.github.io/my-blog/blog/Successful-Rocket-Launches-EDA)')
 
 st.text('To find the data I used for this application, visit my Github repository:') 
-st.markdown('[](https://github.com/boi-andy/final_project)')
+st.markdown('[Rocket Launches](https://github.com/sfolkman4/Rocket-Launches)')
 
 # Plot 1: Line graph of launches per year by provider
 st.header('Launches by Provider')
@@ -51,18 +53,26 @@ plt.ylabel('Number of Launches')
 plt.title(f'Number of Launches per Year for {selected_lsp}')
 plt.xticks(index, launches_per_year_lsp.index)
 plt.legend()
-
 plt.tight_layout()
 
 # Display the plot in Streamlit app
 st.set_option('deprecation.showPyplotGlobalUse', False)
-st.pyplot()
+
+st.pyplot() 
 
 # Calculate the sum of launches for all years
 total_launches = launches_per_year_lsp.sum()
 
 # Display the most popular launch location
 st.write(f"{selected_lsp} Total Launches: **{total_launches}**")
+
+# Find the most recent launch
+most_recent_launch = filtered_df.nlargest(1, 'date')  
+
+# Access the image URL of the most recent launch
+image_url_most_recent = most_recent_launch['image'].values[0]  
+
+st.write(f"Most Recent Launch Image: {image_url_most_recent}")
 
 # Calculate the most popular launch location for the selected service provider
 most_popular_location = filtered_df['location'].mode().values[0]
@@ -91,23 +101,6 @@ st.pyplot()
 
 # Calculate the most popular launch location for the selected service provider
 most_popular_type = filtered_df['mission_type'].mode().values[0]
-
-# Find the most recent launch
-most_recent_launch = filtered_df.nlargest(1, 'date')  # Assuming 'launch_date' is your timestamp column
-
-# Access the image URL of the most recent launch
-image_url_most_recent = most_recent_launch['image'].values[0]
-
-# Fetch and display the image
-response = requests.get(image_url_most_recent)
-img = Image.open(BytesIO(response.content))
-
-plt.imshow(img)
-plt.axis('off')  # Optional: turn off axis
-plt.title('Most Recent Launch Image')
-plt.show()
-
-
 
 # Display the most popular type location
 st.write(f"The most popular type location for {selected_lsp} is: **{most_popular_type}**")
