@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cartopy.crs as ccrs
 
-df = pd.read_csv('C:/Users/sfolk/Desktop/STAT386/Rocket Launches/launch_data.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/sfolkman4/Rocket-Launches/main/launch_data.csv')
 
 # Convert 'date' column to datetime format
 df['date'] = pd.to_datetime(df['date'])
